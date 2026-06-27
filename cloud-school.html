@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Computing in Private Schools</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:    #1a73e8;
+    --blue-d:  #0d47a1;
+    --blue-l:  #e8f0fe;
+    --green:   #34a853;
+    --green-l: #e6f4ea;
+    --orange:  #fa7b17;
+    --orange-l:#fce8d5;
+    --purple:  #7c3aed;
+    --purple-l:#ede9fe;
+    --red:     #ea4335;
+    --gray1:   #202124;
+    --gray2:   #3c4043;
+    --gray3:   #5f6368;
+    --gray4:   #dadce0;
+    --gray5:   #f8f9fa;
+    --white:   #ffffff;
+    --radius:  12px;
+    --shadow:  0 2px 12px rgba(0,0,0,.10);
+    --shadow-h:0 6px 24px rgba(0,0,0,.16);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--gray5);
+    color: var(--gray1);
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray4);
+    box-shadow: var(--shadow);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo { font-weight: 700; font-size: 1rem; color: var(--blue); display:flex;align-items:center;gap:8px; }
+  .nav-logo svg { width:28px;height:28px; }
+  .nav-links { display:flex;gap:4px; }
+  .nav-links a {
+    padding: 6px 12px; border-radius:8px; font-size:.85rem;
+    color:var(--gray2); text-decoration:none; font-weight:500;
+    transition: background .15s, color .15s;
+  }
+  .nav-links a:hover { background:var(--blue-l); color:var(--blue); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0d47a1 0%, #1a73e8 50%, #00acc1 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 80px 24px 100px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content:'';position:absolute;inset:0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display:inline-block; background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:20px; padding:4px 16px; font-size:.8rem;
+    letter-spacing:.06em; text-transform:uppercase; margin-bottom:20px;
+  }
+  .hero h1 { font-size: clamp(2rem,5vw,3.2rem); font-weight:800; margin-bottom:16px; line-height:1.15; }
+  .hero p  { font-size:1.1rem; max-width:620px; margin:0 auto 36px; opacity:.9; }
+  .hero-cards {
+    display:flex; flex-wrap:wrap; justify-content:center; gap:14px;
+    max-width:700px; margin:0 auto;
+  }
+  .hero-card {
+    background:rgba(255,255,255,.15); backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.3);
+    border-radius:10px; padding:10px 20px;
+    font-size:.9rem; font-weight:600; cursor:pointer;
+    transition:background .2s, transform .2s;
+    display:flex;align-items:center;gap:8px;
+  }
+  .hero-card:hover { background:rgba(255,255,255,.28); transform:translateY(-2px); }
+
+  /* ── SECTION ── */
+  .section { padding: 72px 24px; }
+  .section:nth-child(odd) { background: var(--white); }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    border-radius:20px; padding:4px 14px; margin-bottom:12px;
+  }
+  .section-title { font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; margin-bottom:8px; }
+  .section-sub   { color:var(--gray3); font-size:1rem; max-width:560px; margin-bottom:40px; }
+
+  /* colours per section */
+  .c-blue   { color:var(--blue);   background:var(--blue-l); }
+  .c-green  { color:var(--green);  background:var(--green-l); }
+  .c-orange { color:var(--orange); background:var(--orange-l); }
+  .c-purple { color:var(--purple); background:var(--purple-l); }
+
+  /* ── GRID ── */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
+  @media(max-width:760px){ .two-col { grid-template-columns:1fr; } }
+
+  /* ── CARDS ── */
+  .card {
+    background:var(--white); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:24px;
+    border:1px solid var(--gray4);
+    transition:box-shadow .2s, transform .2s;
+  }
+  .card:hover { box-shadow:var(--shadow-h); transform:translateY(-2px); }
+
+  .platform-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; }
+  .platform {
+    border-radius:10px; padding:16px 12px; text-align:center;
+    font-size:.82rem; font-weight:600; color:var(--gray2);
+    background:var(--gray5); border:1px solid var(--gray4);
+    transition:all .2s; cursor:default;
+  }
+  .platform:hover { background:var(--blue-l); color:var(--blue); border-color:var(--blue); }
+  .platform span { display:block; font-size:1.5rem; margin-bottom:4px; }
+
+  .benefit-list { list-style:none; }
+  .benefit-list li {
+    display:flex;align-items:flex-start;gap:10px;
+    padding:8px 0; border-bottom:1px solid var(--gray4); font-size:.93rem;
+  }
+  .benefit-list li:last-child { border:none; }
+  .benefit-list .ico {
+    width:20px;height:20px;flex-shrink:0;margin-top:2px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:.7rem;font-weight:800;color:var(--white);
+  }
+
+  /* ── INTERACTIVE DEMO CARDS ── */
+  .demo-box {
+    background: var(--gray5); border:1px solid var(--gray4);
+    border-radius:var(--radius); overflow:hidden;
+  }
+  .demo-bar {
+    display:flex;align-items:center;gap:8px;
+    background:var(--gray1); padding:10px 16px;
+    font-size:.8rem; color:rgba(255,255,255,.7);
+  }
+  .demo-bar .dot { width:12px;height:12px;border-radius:50%; }
+  .demo-body { padding:20px; }
+
+  /* Gradebook demo */
+  .gradebook-table { width:100%; border-collapse:collapse; font-size:.85rem; }
+  .gradebook-table th {
+    background:var(--blue); color:var(--white);
+    padding:8px 12px; text-align:left; font-weight:600;
+  }
+  .gradebook-table td { padding:8px 12px; border-bottom:1px solid var(--gray4); }
+  .gradebook-table tr:last-child td { border:none; }
+  .gradebook-table tr:nth-child(even) td { background:#f0f4ff; }
+  .grade-badge {
+    display:inline-block; padding:2px 10px; border-radius:12px;
+    font-size:.78rem; font-weight:700;
+  }
+  .grade-a  { background:#e6f4ea; color:#1e7e34; }
+  .grade-b  { background:#e8f0fe; color:#1a56db; }
+  .grade-c  { background:#fff8e1; color:#b45309; }
+  .grade-avg{ background:var(--blue); color:var(--white); }
+
+  /* Exam timer demo */
+  .exam-header {
+    background:var(--blue); color:var(--white);
+    border-radius:8px; padding:16px; margin-bottom:16px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .timer-display {
+    font-size:2rem; font-weight:800; font-variant-numeric:tabular-nums;
+    letter-spacing:.05em;
+  }
+  .timer-display.warning { color:#ffd600; }
+  .question-block {
+    background:var(--white); border-radius:8px; padding:16px;
+    border:1px solid var(--gray4); margin-bottom:12px;
+  }
+  .question-block p { font-weight:600; margin-bottom:10px; font-size:.9rem; }
+  .option {
+    display:flex;align-items:center;gap:10px;
+    padding:8px 12px; border-radius:8px; margin-bottom:6px;
+    border:1px solid var(--gray4); cursor:pointer; font-size:.88rem;
+    transition:all .15s;
+  }
+  .option:hover { border-color:var(--blue); background:var(--blue-l); }
+  .option.selected { border-color:var(--blue); background:var(--blue-l); font-weight:600; }
+  .option.correct  { border-color:var(--green); background:var(--green-l); color:var(--green); font-weight:600; }
+  .option.wrong    { border-color:var(--red);   background:#fce8e6;        color:var(--red);   font-weight:600; }
+  .exam-actions { display:flex;gap:10px; margin-top:12px; }
+  .btn {
+    padding:8px 20px; border-radius:8px; font-size:.88rem;
+    font-weight:600; border:none; cursor:pointer; transition:all .15s;
+  }
+  .btn-primary { background:var(--blue); color:var(--white); }
+  .btn-primary:hover { background:var(--blue-d); }
+  .btn-outline { background:transparent; border:1px solid var(--blue); color:var(--blue); }
+  .btn-outline:hover { background:var(--blue-l); }
+  .result-banner {
+    display:none; padding:14px; border-radius:8px; text-align:center;
+    font-weight:700; margin-top:12px; font-size:1rem;
+  }
+
+  /* Admin demo */
+  .admin-form { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+  @media(max-width:500px){ .admin-form { grid-template-columns:1fr; } }
+  .form-group { display:flex;flex-direction:column;gap:4px; }
+  .form-group label { font-size:.78rem; font-weight:600; color:var(--gray3); text-transform:uppercase; letter-spacing:.04em; }
+  .form-group input, .form-group select {
+    padding:9px 12px; border-radius:8px;
+    border:1px solid var(--gray4); font-size:.88rem;
+    outline:none; transition:border .15s;
+    background:var(--white);
+  }
+  .form-group input:focus, .form-group select:focus { border-color:var(--blue); }
+  .form-full { grid-column:1/-1; }
+  .enrollment-table { width:100%; border-collapse:collapse; font-size:.82rem; margin-top:16px; }
+  .enrollment-table th { background:var(--green); color:var(--white); padding:8px 10px; text-align:left; }
+  .enrollment-table td { padding:7px 10px; border-bottom:1px solid var(--gray4); }
+  .enrollment-table tr:last-child td { border:none; }
+  .status-badge { display:inline-block;padding:2px 10px;border-radius:12px;font-size:.75rem;font-weight:700; }
+  .status-active   { background:#e6f4ea;color:#1e7e34; }
+  .status-pending  { background:#fff8e1;color:#b45309; }
+  .status-new      { background:#e8f0fe;color:#1a56db; }
+
+  /* Chat demo */
+  .chat-window {
+    border:1px solid var(--gray4); border-radius:var(--radius);
+    overflow:hidden; display:flex;flex-direction:column; height:360px;
+  }
+  .chat-toolbar {
+    background:var(--purple); color:var(--white);
+    padding:12px 16px; display:flex;align-items:center;gap:10px;
+    font-weight:600; font-size:.9rem;
+  }
+  .chat-avatar {
+    width:32px;height:32px;border-radius:50%;
+    background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;
+    font-size:.85rem;font-weight:700;
+  }
+  .chat-messages {
+    flex:1;overflow-y:auto;padding:16px;
+    display:flex;flex-direction:column;gap:10px;
+    background:var(--gray5);
+  }
+  .msg { display:flex;gap:8px;align-items:flex-end;max-width:85%; }
+  .msg.right { flex-direction:row-reverse;align-self:flex-end; }
+  .msg-avatar {
+    width:28px;height:28px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.7rem;font-weight:700;color:var(--white);
+  }
+  .msg-bubble {
+    padding:8px 12px;border-radius:12px;font-size:.83rem;line-height:1.4;
+  }
+  .msg.left  .msg-bubble { background:var(--white);border:1px solid var(--gray4);border-bottom-left-radius:4px; }
+  .msg.right .msg-bubble { background:var(--purple);color:var(--white);border-bottom-right-radius:4px; }
+  .msg-meta { font-size:.7rem;color:var(--gray3);margin-top:2px;padding:0 4px; }
+  .chat-input-bar {
+    padding:12px 16px;border-top:1px solid var(--gray4);
+    display:flex;gap:8px;background:var(--white);
+  }
+  .chat-input {
+    flex:1;padding:8px 14px;border-radius:20px;border:1px solid var(--gray4);
+    font-size:.85rem;outline:none;
+  }
+  .chat-input:focus { border-color:var(--purple); }
+  .btn-send {
+    background:var(--purple);color:var(--white);border:none;
+    border-radius:20px;padding:8px 18px;font-size:.85rem;
+    font-weight:600;cursor:pointer;transition:background .15s;
+  }
+  .btn-send:hover { background:#5b21b6; }
+
+  /* Security section */
+  .security-cards { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px; }
+  .sec-card {
+    border-radius:var(--radius);padding:24px;border:1px solid var(--gray4);
+    background:var(--white);box-shadow:var(--shadow);
+  }
+  .sec-icon { font-size:2rem;margin-bottom:12px; }
+  .sec-title { font-weight:700;font-size:1rem;margin-bottom:6px; }
+  .sec-desc  { font-size:.87rem;color:var(--gray3);line-height:1.5; }
+
+  /* Progress bars */
+  .progress-row { margin-bottom:12px; }
+  .progress-label { display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px; }
+  .progress-bar  { height:8px;background:var(--gray4);border-radius:4px;overflow:hidden; }
+  .progress-fill { height:100%;border-radius:4px;transition:width 1.2s ease; }
+
+  /* FOOTER */
+  footer {
+    background:var(--gray1); color:rgba(255,255,255,.65);
+    text-align:center; padding:40px 24px; font-size:.85rem;
+  }
+  footer strong { color:var(--white); }
+
+  /* Animations */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+  .fadeUp { animation:fadeUp .5s ease both; }
+  .delay-1 { animation-delay:.1s; }
+  .delay-2 { animation-delay:.2s; }
+  .delay-3 { animation-delay:.3s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="16" cy="20" rx="12" ry="7" fill="#1a73e8" opacity=".2"/>
+      <path d="M6 19c0-3.3 2.2-6.1 5.2-7a7 7 0 0 1 13.4 1.5A5 5 0 0 1 26 23H8a5 5 0 0 1-2-4z" fill="#1a73e8"/>
+      <circle cx="22" cy="13" r="3" fill="#34a853"/>
+    </svg>
+    CloudEdu
+  </div>
+  <div class="nav-links">
+    <a href="#grading">Grading</a>
+    <a href="#exams">Exams</a>
+    <a href="#admin">Admin</a>
+    <a href="#comm">Communication</a>
+    <a href="#security">Security</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Cloud Computing · Private Schools</div>
+  <h1 class="fadeUp">Transforming Education<br>with Cloud Solutions</h1>
+  <p class="fadeUp delay-1">Discover how cloud computing helps private schools improve teaching, administration, and communication — securely and from any device.</p>
+  <div class="hero-cards fadeUp delay-2">
+    <div class="hero-card" onclick="document.getElementById('grading').scrollIntoView({behavior:'smooth'})">
+      📊 Smart Grading
+    </div>
+    <div class="hero-card" onclick="document.getElementById('exams').scrollIntoView({behavior:'smooth'})">
+      📝 Online Exams
+    </div>
+    <div class="hero-card" onclick="document.getElementById('admin').scrollIntoView({behavior:'smooth'})">
+      🏫 Administration
+    </div>
+    <div class="hero-card" onclick="document.getElementById('comm').scrollIntoView({behavior:'smooth'})">
+      💬 Communication
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1 — GRADING & ASSESSMENTS
+════════════════════════════════════════════ -->
+<section class="section" id="grading">
+  <div class="container">
+    <div class="section-label c-blue">📊 Section 1</div>
+    <h2 class="section-title">Smarter Grading &amp; Assessments</h2>
+    <p class="section-sub">Teachers record, calculate, and share grades automatically using cloud-based platforms — saving hours every week.</p>
+
+    <div class="two-col">
+      <!-- Left: live gradebook -->
+      <div>
+        <div class="demo-box">
+          <div class="demo-bar">
+            <span class="dot" style="background:#ff5f57"></span>
+            <span class="dot" style="background:#febc2e"></span>
+            <span class="dot" style="background:#28c840"></span>
+            <span style="margin-left:8px">Google Classroom · Gradebook · 10-A</span>
+          </div>
+          <div class="demo-body">
+            <table class="gradebook-table" id="gradebook">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Math</th>
+                  <th>Science</th>
+                  <th>English</th>
+                  <th>Average</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Emma Johnson</td>
+                  <td><span class="grade-badge grade-a">95</span></td>
+                  <td><span class="grade-badge grade-a">92</span></td>
+                  <td><span class="grade-badge grade-a">97</span></td>
+                  <td><span class="grade-badge grade-avg">94.7</span></td>
+                </tr>
+                <tr>
+                  <td>Carlos Rivera</td>
+                  <td><span class="grade-badge grade-b">81</span></td>
+                  <td><span class="grade-badge grade-a">88</span></td>
+                  <td><span class="grade-badge grade-b">79</span></td>
+                  <td><span class="grade-badge grade-avg">82.7</span></td>
+                </tr>
+                <tr>
+                  <td>Sophie Chen</td>
+                  <td><span class="grade-badge grade-a">99</span></td>
+                  <td><span class="grade-badge grade-a">96</span></td>
+                  <td><span class="grade-badge grade-a">94</span></td>
+                  <td><span class="grade-badge grade-avg">96.3</span></td>
+                </tr>
+                <tr>
+                  <td>Liam Okafor</td>
+                  <td><span class="grade-badge grade-c">73</span></td>
+                  <td><span class="grade-badge grade-b">78</span></td>
+                  <td><span class="grade-badge grade-b">80</span></td>
+                  <td><span class="grade-badge grade-avg">77.0</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="margin-top:16px">
+              <p style="font-size:.8rem;font-weight:600;color:var(--gray3);margin-bottom:8px">ADD A GRADE</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <select id="gs-student" style="flex:1;min-width:100px;padding:7px;border-radius:8px;border:1px solid var(--gray4);font-size:.82rem;outline:none">
+                  <option>Emma Johnson</option>
+                  <option>Carlos Rivera</option>
+                  <option>Sophie Chen</option>
+                  <option>Liam Okafor</option>
+                </select>
+                <select id="gs-subject" style="flex:1;min-width:80px;padding:7px;border-radius:8px;border:1px solid var(--gray4);font-size:.82rem;outline:none">
+                  <option>Math</option>
+                  <option>Science</option>
+                  <option>English</option>
+                </select>
+                <input id="gs-score" type="number" min="0" max="100" placeholder="Score" style="width:70px;padding:7px;border-radius:8px;border:1px solid var(--gray4);font-size:.82rem;outline:none">
+                <button class="btn btn-primary" onclick="updateGrade()">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: info -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">🔄 How it works</p>
+          <ul class="benefit-list">
+            <li><span class="ico" style="background:var(--blue)">1</span>Teachers create assignments online</li>
+            <li><span class="ico" style="background:var(--blue)">2</span>Students submit homework digitally</li>
+            <li><span class="ico" style="background:var(--blue)">3</span>Grades are calculated automatically</li>
+            <li><span class="ico" style="background:var(--blue)">4</span>Parents can monitor academic progress</li>
+            <li><span class="ico" style="background:var(--blue)">5</span>Reports are generated instantly</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">✅ Key Benefits</p>
+          <ul class="benefit-list">
+            <li><span class="ico" style="background:var(--green)">✓</span>Save teachers hours of grading</li>
+            <li><span class="ico" style="background:var(--green)">✓</span>Reduce grading errors</li>
+            <li><span class="ico" style="background:var(--green)">✓</span>Students receive faster feedback</li>
+            <li><span class="ico" style="background:var(--green)">✓</span>Parents can check grades anytime</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">🛠 Real Platforms</p>
+          <div class="platform-grid">
+            <div class="platform"><span>🎓</span>Google Classroom</div>
+            <div class="platform"><span>🖼</span>Canvas LMS</div>
+            <div class="platform"><span>💼</span>MS Teams Edu</div>
+            <div class="platform"><span>📋</span>PowerSchool</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2 — ONLINE EXAMS
+════════════════════════════════════════════ -->
+<section class="section" id="exams" style="background:var(--gray5)">
+  <div class="container">
+    <div class="section-label c-green">📝 Section 2</div>
+    <h2 class="section-title">Secure Digital Testing</h2>
+    <p class="section-sub">Cloud platforms let schools run quizzes, midterms, and finals online — with timers, randomized questions, and instant results.</p>
+
+    <div class="two-col">
+      <!-- Left: info -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">⚡ Features</p>
+          <ul class="benefit-list">
+            <li><span class="ico" style="background:var(--green)">✓</span>Automatic grading</li>
+            <li><span class="ico" style="background:var(--green)">✓</span>Timed exams</li>
+            <li><span class="ico" style="background:var(--green)">✓</span>Randomized questions</li>
+            <li><span class="ico" style="background:var(--green)">✓</span>Instant results</li>
+            <li><span class="ico" style="background:var(--green)">✓</span>Secure storage</li>
+            <li><span class="ico" style="background:var(--green)">✓</span>Accessible from home or school</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">🛠 Real Platforms</p>
+          <div class="platform-grid">
+            <div class="platform"><span>🦉</span>Moodle Quiz</div>
+            <div class="platform"><span>📋</span>Google Forms</div>
+            <div class="platform"><span>📑</span>MS Forms</div>
+            <div class="platform"><span>🖼</span>Canvas Quizzes</div>
+            <div class="platform"><span>🔒</span>ExamSoft</div>
+          </div>
+        </div>
+
+        <div class="card" style="border-left:4px solid var(--green)">
+          <p style="font-weight:700;margin-bottom:6px">📌 Real-world Example</p>
+          <p style="font-size:.88rem;color:var(--gray2)">A private school schedules a <strong>Mathematics final exam</strong>. Students log in with their school accounts, complete the exam online, and receive their scores immediately.</p>
+        </div>
+      </div>
+
+      <!-- Right: interactive exam -->
+      <div>
+        <div class="demo-box">
+          <div class="demo-bar">
+            <span class="dot" style="background:#ff5f57"></span>
+            <span class="dot" style="background:#febc2e"></span>
+            <span class="dot" style="background:#28c840"></span>
+            <span style="margin-left:8px">Canvas Quizzes · Mathematics Final</span>
+          </div>
+          <div class="demo-body">
+            <div class="exam-header">
+              <div>
+                <div style="font-weight:700;font-size:.95rem">Mathematics — Final Exam</div>
+                <div style="font-size:.78rem;opacity:.8">Student: Emma Johnson · Grade 10-A</div>
+              </div>
+              <div>
+                <div style="font-size:.7rem;opacity:.8;text-align:right;margin-bottom:2px">TIME REMAINING</div>
+                <div class="timer-display" id="examTimer">25:00</div>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <p>Q1. What is the value of x in: 3x + 9 = 24?</p>
+              <div class="option" onclick="selectOption(this,'q1','wrong')">A) 3</div>
+              <div class="option" onclick="selectOption(this,'q1','correct')">B) 5</div>
+              <div class="option" onclick="selectOption(this,'q1','wrong')">C) 8</div>
+              <div class="option" onclick="selectOption(this,'q1','wrong')">D) 12</div>
+            </div>
+            <div class="question-block">
+              <p>Q2. Which formula calculates the area of a circle?</p>
+              <div class="option" onclick="selectOption(this,'q2','wrong')">A) A = 2πr</div>
+              <div class="option" onclick="selectOption(this,'q2','wrong')">B) A = πd</div>
+              <div class="option" onclick="selectOption(this,'q2','correct')">C) A = πr²</div>
+              <div class="option" onclick="selectOption(this,'q2','wrong')">D) A = r²</div>
+            </div>
+
+            <div class="exam-actions">
+              <button class="btn btn-primary" onclick="submitExam()">Submit Exam</button>
+              <button class="btn btn-outline" onclick="resetExam()">Reset</button>
+            </div>
+            <div class="result-banner" id="examResult"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3 — ADMINISTRATIVE TASKS
+════════════════════════════════════════════ -->
+<section class="section" id="admin">
+  <div class="container">
+    <div class="section-label c-orange">🏫 Section 3</div>
+    <h2 class="section-title">Administrative Tasks</h2>
+    <p class="section-sub">Cloud computing simplifies school administration by storing all institutional information in one secure, accessible place.</p>
+
+    <div class="two-col">
+      <!-- Left: info -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">📁 What schools can manage</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Student enrollment</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Attendance records</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Academic transcripts</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Tuition payments</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Payroll</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Teacher schedules</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Timetables</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Inventory</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>Library system</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.85rem"><span style="color:var(--orange)">▸</span>School reports</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">✅ Benefits</p>
+          <ul class="benefit-list">
+            <li><span class="ico" style="background:var(--orange)">✓</span>Less paperwork</li>
+            <li><span class="ico" style="background:var(--orange)">✓</span>Faster access to records</li>
+            <li><span class="ico" style="background:var(--orange)">✓</span>Automatic backups</li>
+            <li><span class="ico" style="background:var(--orange)">✓</span>Lower IT costs</li>
+            <li><span class="ico" style="background:var(--orange)">✓</span>Easy data sharing between departments</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">🛠 Real Platforms</p>
+          <div class="platform-grid">
+            <div class="platform"><span>🌐</span>Google Workspace</div>
+            <div class="platform"><span>💼</span>Microsoft 365</div>
+            <div class="platform"><span>📋</span>PowerSchool</div>
+            <div class="platform"><span>🏫</span>Blackbaud</div>
+            <div class="platform"><span>📂</span>FACTS SIS</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: enrollment demo -->
+      <div>
+        <div class="demo-box">
+          <div class="demo-bar">
+            <span class="dot" style="background:#ff5f57"></span>
+            <span class="dot" style="background:#febc2e"></span>
+            <span class="dot" style="background:#28c840"></span>
+            <span style="margin-left:8px">PowerSchool · Student Enrollment</span>
+          </div>
+          <div class="demo-body">
+            <p style="font-size:.82rem;font-weight:700;color:var(--gray3);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em">NEW STUDENT ENROLLMENT</p>
+            <div class="admin-form">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="enroll-fn" placeholder="e.g. Maria">
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="enroll-ln" placeholder="e.g. González">
+              </div>
+              <div class="form-group">
+                <label>Grade Level</label>
+                <select id="enroll-grade">
+                  <option>Grade 9</option>
+                  <option>Grade 10</option>
+                  <option>Grade 11</option>
+                  <option>Grade 12</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Program</label>
+                <select id="enroll-prog">
+                  <option>General</option>
+                  <option>STEM</option>
+                  <option>Humanities</option>
+                  <option>Business</option>
+                </select>
+              </div>
+              <div class="form-group form-full">
+                <label>Parent Email</label>
+                <input type="email" id="enroll-email" placeholder="parent@example.com">
+              </div>
+              <div class="form-full" style="display:flex;gap:10px">
+                <button class="btn btn-primary" onclick="enrollStudent()" style="background:var(--orange)">Enroll Student</button>
+                <button class="btn btn-outline" onclick="clearEnroll()" style="border-color:var(--orange);color:var(--orange)">Clear</button>
+              </div>
+            </div>
+
+            <div id="enrollMsg" style="display:none;margin-top:12px;padding:12px;border-radius:8px;background:var(--green-l);color:var(--green);font-size:.85rem;font-weight:600"></div>
+
+            <p style="font-size:.78rem;font-weight:700;color:var(--gray3);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.05em">RECENT ENROLLMENTS</p>
+            <table class="enrollment-table" id="enrollTable">
+              <thead><tr><th>Name</th><th>Grade</th><th>Program</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Anna White</td><td>10</td><td>STEM</td><td><span class="status-badge status-active">Active</span></td></tr>
+                <tr><td>James Park</td><td>11</td><td>General</td><td><span class="status-badge status-pending">Pending</span></td></tr>
+                <tr><td>Sofia Torres</td><td>9</td><td>Humanities</td><td><span class="status-badge status-active">Active</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4 — COMMUNICATION
+════════════════════════════════════════════ -->
+<section class="section" id="comm" style="background:var(--gray5)">
+  <div class="container">
+    <div class="section-label c-purple">💬 Section 4</div>
+    <h2 class="section-title">Communication</h2>
+    <p class="section-sub">Cloud computing keeps the entire school community connected — teachers, students, parents, and administrators in one place.</p>
+
+    <div class="two-col">
+      <!-- Left: roles -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:10px">👩‍🏫 Teachers can</p>
+          <ul class="benefit-list">
+            <li><span class="ico" style="background:var(--purple)">→</span>Send assignments</li>
+            <li><span class="ico" style="background:var(--purple)">→</span>Share presentations</li>
+            <li><span class="ico" style="background:var(--purple)">→</span>Schedule virtual classes</li>
+            <li><span class="ico" style="background:var(--purple)">→</span>Answer student questions</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:10px">🎒 Students can</p>
+          <ul class="benefit-list">
+            <li><span class="ico" style="background:var(--blue)">→</span>Submit homework</li>
+            <li><span class="ico" style="background:var(--blue)">→</span>Participate in discussions</li>
+            <li><span class="ico" style="background:var(--blue)">→</span>Download learning materials</li>
+            <li><span class="ico" style="background:var(--blue)">→</span>Receive announcements</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:10px">🏛 Administrators can</p>
+          <ul class="benefit-list">
+            <li><span class="ico" style="background:var(--orange)">→</span>Notify parents</li>
+            <li><span class="ico" style="background:var(--orange)">→</span>Organize meetings</li>
+            <li><span class="ico" style="background:var(--orange)">→</span>Share school calendars</li>
+            <li><span class="ico" style="background:var(--orange)">→</span>Coordinate school events</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <p style="font-weight:700;margin-bottom:12px;font-size:.95rem">🛠 Real Platforms</p>
+          <div class="platform-grid">
+            <div class="platform"><span>💼</span>MS Teams</div>
+            <div class="platform"><span>🎥</span>Google Meet</div>
+            <div class="platform"><span>📹</span>Zoom</div>
+            <div class="platform"><span>💬</span>Google Chat</div>
+            <div class="platform"><span>💡</span>Slack</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: chat simulation -->
+      <div>
+        <div class="demo-box">
+          <div class="demo-bar">
+            <span class="dot" style="background:#ff5f57"></span>
+            <span class="dot" style="background:#febc2e"></span>
+            <span class="dot" style="background:#28c840"></span>
+            <span style="margin-left:8px">Microsoft Teams · 10-A General Channel</span>
+          </div>
+          <div class="demo-body" style="padding:0">
+            <div class="chat-window">
+              <div class="chat-toolbar">
+                <div class="chat-avatar">📢</div>
+                <div>
+                  <div>Grade 10-A · Announcements</div>
+                  <div style="font-size:.72rem;opacity:.75">12 members · Ms. Martínez, Mr. Obi, Principal Reyes…</div>
+                </div>
+              </div>
+              <div class="chat-messages" id="chatMessages">
+                <div class="msg left">
+                  <div class="msg-avatar" style="background:#1a73e8">PR</div>
+                  <div>
+                    <div class="msg-bubble">📣 Reminder: Science Fair submissions are due <strong>this Friday</strong> by 3:00 PM. Upload to Google Drive.</div>
+                    <div class="msg-meta">Principal Reyes · 9:02 AM</div>
+                  </div>
+                </div>
+                <div class="msg left">
+                  <div class="msg-avatar" style="background:#34a853">MM</div>
+                  <div>
+                    <div class="msg-bubble">Good morning! Math quiz grades have been posted in Canvas. Check your feedback! 📊</div>
+                    <div class="msg-meta">Ms. Martínez · 9:15 AM</div>
+                  </div>
+                </div>
+                <div class="msg right">
+                  <div class="msg-avatar" style="background:#7c3aed">EJ</div>
+                  <div>
+                    <div class="msg-bubble">Thank you! Can we schedule a review session before the final?</div>
+                    <div class="msg-meta">Emma Johnson · 9:18 AM</div>
+                  </div>
+                </div>
+                <div class="msg left">
+                  <div class="msg-avatar" style="background:#34a853">MM</div>
+                  <div>
+                    <div class="msg-bubble">Great idea! I'll schedule a Google Meet for Thursday 4 PM. I'll send the link shortly. 🎥</div>
+                    <div class="msg-meta">Ms. Martínez · 9:20 AM</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input-bar">
+                <select id="chatRole" style="padding:6px 8px;border-radius:20px;border:1px solid var(--gray4);font-size:.78rem;outline:none;color:var(--gray2)">
+                  <option>Emma Johnson (Student)</option>
+                  <option>Ms. Martínez (Teacher)</option>
+                  <option>Principal Reyes (Admin)</option>
+                  <option>Carlos Rivera (Student)</option>
+                </select>
+                <input class="chat-input" id="chatInput" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendMessage()">
+                <button class="btn-send" onclick="sendMessage()">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;border-left:4px solid var(--purple)">
+          <p style="font-weight:700;margin-bottom:6px">📌 Real-world Example</p>
+          <p style="font-size:.88rem;color:var(--gray2)">The principal sends an announcement through <strong>Microsoft Teams</strong>. Teachers, students, and parents receive it instantly on computers and mobile devices.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5 — SECURITY
+════════════════════════════════════════════ -->
+<section class="section" id="security">
+  <div class="container">
+    <div class="section-label" style="color:#dc2626;background:#fef2f2">🔒 Security</div>
+    <h2 class="section-title">Safe &amp; Secure School Data</h2>
+    <p class="section-sub">Cloud providers protect school information using advanced security technologies — ensuring data is always safe, private, and available.</p>
+
+    <div class="security-cards">
+      <div class="sec-card" style="border-top:4px solid #1a73e8">
+        <div class="sec-icon">🔐</div>
+        <div class="sec-title">Confidentiality</div>
+        <div class="sec-desc">Only authorized teachers, administrators, students, and parents can access the information assigned to them. Role-based access control ensures no one sees more than they should.</div>
+      </div>
+      <div class="sec-card" style="border-top:4px solid #34a853">
+        <div class="sec-icon">🛡</div>
+        <div class="sec-title">Integrity</div>
+        <div class="sec-desc">Grades, attendance records, and academic reports cannot be modified without authorization. Every change is logged and traceable.</div>
+      </div>
+      <div class="sec-card" style="border-top:4px solid #fa7b17">
+        <div class="sec-icon">⚡</div>
+        <div class="sec-title">Availability</div>
+        <div class="sec-desc">School services remain available 24/7 from any device with an internet connection. Cloud infrastructure guarantees high uptime and disaster recovery.</div>
+      </div>
+      <div class="sec-card" style="border-top:4px solid #7c3aed">
+        <div class="sec-icon">☁</div>
+        <div class="sec-title">Automatic Backups</div>
+        <div class="sec-desc">All school data is automatically backed up to secure cloud servers. No risk of losing student records, grades, or financial information due to local hardware failure.</div>
+      </div>
+    </div>
+
+    <!-- Cloud adoption meter -->
+    <div class="card" style="margin-top:36px;max-width:600px">
+      <p style="font-weight:700;margin-bottom:16px;font-size:.95rem">📈 Cloud Adoption Benefits for Private Schools</p>
+      <div class="progress-row">
+        <div class="progress-label"><span>Reduction in paperwork</span><span style="font-weight:700;color:var(--blue)">87%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:0;background:var(--blue)" data-target="87"></div></div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>Faster grade reporting</span><span style="font-weight:700;color:var(--green)">94%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:0;background:var(--green)" data-target="94"></div></div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>Parent satisfaction</span><span style="font-weight:700;color:var(--orange)">79%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:0;background:var(--orange)" data-target="79"></div></div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>IT cost savings</span><span style="font-weight:700;color:var(--purple)">62%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:0;background:var(--purple)" data-target="62"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Cloud Computing in Private Schools</strong></p>
+  <p style="margin-top:8px">Cloud Computing Environment and Security Challenges · Educational Presentation</p>
+</footer>
+
+
+<script>
+(function () {
+
+  /* ── GRADEBOOK ── */
+  var gradeData = {
+    'Emma Johnson':  { Math:95, Science:92, English:97 },
+    'Carlos Rivera': { Math:81, Science:88, English:79 },
+    'Sophie Chen':   { Math:99, Science:96, English:94 },
+    'Liam Okafor':   { Math:73, Science:78, English:80 }
+  };
+
+  function badgeClass(v) {
+    if (v >= 90) return 'grade-a';
+    if (v >= 80) return 'grade-b';
+    return 'grade-c';
+  }
+
+  function renderGradebook() {
+    var tbody = document.querySelector('#gradebook tbody');
+    tbody.innerHTML = '';
+    Object.keys(gradeData).forEach(function(name) {
+      var d = gradeData[name];
+      var avg = ((d.Math + d.Science + d.English) / 3).toFixed(1);
+      tbody.innerHTML += '<tr>' +
+        '<td>' + name + '</td>' +
+        '<td><span class="grade-badge ' + badgeClass(d.Math) + '">' + d.Math + '</span></td>' +
+        '<td><span class="grade-badge ' + badgeClass(d.Science) + '">' + d.Science + '</span></td>' +
+        '<td><span class="grade-badge ' + badgeClass(d.English) + '">' + d.English + '</span></td>' +
+        '<td><span class="grade-badge grade-avg">' + avg + '</span></td>' +
+        '</tr>';
+    });
+  }
+
+  window.updateGrade = function () {
+    var student = document.getElementById('gs-student').value;
+    var subject = document.getElementById('gs-subject').value;
+    var score   = parseInt(document.getElementById('gs-score').value, 10);
+    if (isNaN(score) || score < 0 || score > 100) {
+      alert('Please enter a valid score between 0 and 100.');
+      return;
+    }
+    gradeData[student][subject] = score;
+    renderGradebook();
+    document.getElementById('gs-score').value = '';
+  };
+
+  /* ── EXAM TIMER ── */
+  var timerSeconds = 25 * 60;
+  var timerInterval = null;
+  var examActive = true;
+
+  function formatTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  function startTimer() {
+    timerInterval = setInterval(function () {
+      if (!examActive) return;
+      timerSeconds--;
+      var el = document.getElementById('examTimer');
+      el.textContent = formatTime(timerSeconds);
+      el.classList.toggle('warning', timerSeconds <= 120);
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval);
+        submitExam();
+      }
+    }, 1000);
+  }
+
+  var q1Answered = false, q2Answered = false;
+
+  window.selectOption = function (el, q, type) {
+    if (q === 'q1' && q1Answered) return;
+    if (q === 'q2' && q2Answered) return;
+    var parent = el.parentElement;
+    Array.from(parent.querySelectorAll('.option')).forEach(function(o){ o.classList.remove('selected'); });
+    el.classList.add('selected');
+  };
+
+  window.submitExam = function () {
+    examActive = false;
+    clearInterval(timerInterval);
+    var correct = 0;
+    document.querySelectorAll('.question-block').forEach(function(block, i) {
+      var selected = block.querySelector('.option.selected');
+      if (!selected) return;
+      if (selected.classList.contains('selected')) {
+        if (i === 0) {
+          var isC = selected.textContent.trim().startsWith('B)');
+          selected.classList.remove('selected');
+          selected.classList.add(isC ? 'correct' : 'wrong');
+          if (isC) correct++;
+        }
+        if (i === 1) {
+          var isC2 = selected.textContent.trim().startsWith('C)');
+          selected.classList.remove('selected');
+          selected.classList.add(isC2 ? 'correct' : 'wrong');
+          if (isC2) correct++;
+        }
+      }
+    });
+    var res = document.getElementById('examResult');
+    res.style.display = 'block';
+    if (correct === 2) {
+      res.style.background = 'var(--green-l)'; res.style.color = 'var(--green)';
+      res.innerHTML = '🎉 Score: 100/100 — Excellent! Both answers correct.';
+    } else if (correct === 1) {
+      res.style.background = '#fff8e1'; res.style.color = '#b45309';
+      res.innerHTML = '📊 Score: 50/100 — 1 out of 2 correct. Review your answers.';
+    } else {
+      res.style.background = '#fce8e6'; res.style.color = 'var(--red)';
+      res.innerHTML = '❌ Score: 0/100 — No correct answers. Try again!';
+    }
+  };
+
+  window.resetExam = function () {
+    examActive = true;
+    clearInterval(timerInterval);
+    timerSeconds = 25 * 60;
+    document.getElementById('examTimer').textContent = formatTime(timerSeconds);
+    document.getElementById('examTimer').classList.remove('warning');
+    document.getElementById('examResult').style.display = 'none';
+    document.querySelectorAll('.option').forEach(function(o){
+      o.classList.remove('selected','correct','wrong');
+    });
+    q1Answered = false; q2Answered = false;
+    startTimer();
+  };
+
+  startTimer();
+
+  /* ── ENROLLMENT ── */
+  window.enrollStudent = function () {
+    var fn    = document.getElementById('enroll-fn').value.trim();
+    var ln    = document.getElementById('enroll-ln').value.trim();
+    var grade = document.getElementById('enroll-grade').value;
+    var prog  = document.getElementById('enroll-prog').value;
+    if (!fn || !ln) { alert('Please enter the student name.'); return; }
+    var gradeNum = grade.replace('Grade ','');
+    var tbody = document.querySelector('#enrollTable tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + fn + ' ' + ln + '</td><td>' + gradeNum + '</td><td>' + prog + '</td><td><span class="status-badge status-new">New</span></td>';
+    tbody.insertBefore(tr, tbody.firstChild);
+    var msg = document.getElementById('enrollMsg');
+    msg.style.display = 'block';
+    msg.innerHTML = '✅ ' + fn + ' ' + ln + ' enrolled successfully! Record synced to all departments.';
+    setTimeout(function(){ msg.style.display = 'none'; }, 4000);
+    clearEnroll();
+  };
+
+  window.clearEnroll = function () {
+    ['enroll-fn','enroll-ln','enroll-email'].forEach(function(id){ document.getElementById(id).value=''; });
+  };
+
+  /* ── CHAT ── */
+  var roleColors = {
+    'Emma Johnson (Student)':    '#7c3aed',
+    'Ms. Martínez (Teacher)':    '#34a853',
+    'Principal Reyes (Admin)':   '#1a73e8',
+    'Carlos Rivera (Student)':   '#ea4335'
+  };
+  var roleShort = {
+    'Emma Johnson (Student)':    'EJ',
+    'Ms. Martínez (Teacher)':    'MM',
+    'Principal Reyes (Admin)':   'PR',
+    'Carlos Rivera (Student)':   'CR'
+  };
+
+  window.sendMessage = function () {
+    var input = document.getElementById('chatInput');
+    var role  = document.getElementById('chatRole').value;
+    var text  = input.value.trim();
+    if (!text) return;
+    var msgs = document.getElementById('chatMessages');
+    var isRight = role.includes('Student');
+    var color   = roleColors[role] || '#666';
+    var abbr    = roleShort[role]  || '??';
+    var now     = new Date();
+    var time    = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes() + ' ' + (now.getHours() < 12 ? 'AM' : 'PM');
+    var shortName = role.split(' (')[0];
+    msgs.innerHTML += '<div class="msg ' + (isRight ? 'right' : 'left') + '">' +
+      '<div class="msg-avatar" style="background:' + color + '">' + abbr + '</div>' +
+      '<div>' +
+        '<div class="msg-bubble">' + escapeHtml(text) + '</div>' +
+        '<div class="msg-meta">' + shortName + ' · ' + time + '</div>' +
+      '</div>' +
+    '</div>';
+    msgs.scrollTop = msgs.scrollHeight;
+    input.value = '';
+  };
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ── PROGRESS BARS (IntersectionObserver) ── */
+  var bars = document.querySelectorAll('.progress-fill[data-target]');
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.style.width = e.target.dataset.target + '%';
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    bars.forEach(function(b){ obs.observe(b); });
+  } else {
+    bars.forEach(function(b){ b.style.width = b.dataset.target + '%'; });
+  }
+
+})();
+</script>
+</body>
+</html>
